@@ -1,0 +1,20 @@
+server:
+  port: 8766
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+spring:
+  application:
+    name: service-zuul
+#路由
+zuul:
+  routes:
+    api-a:
+      path: /api-auth/**
+      serviceId: service-auth
+    api-b:
+      path: /api-b/**
+      serviceId: service-feign

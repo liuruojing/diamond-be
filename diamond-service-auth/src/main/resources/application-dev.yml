@@ -1,0 +1,55 @@
+server:
+  port: 8763
+#服务注册地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+#服务名
+spring:
+  application:
+    name: service-auth
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/diamond_auth?characterEncoding=utf-8
+    druid:
+      #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat;日志用的filter:log4j;防御sql注入的filter:wall
+      filters: stat
+      #初始化时建立物理连接的个数
+      initial-size: 1
+      #最小连接池数量
+      min-idle: 5
+      #最大连接池数量
+      max-active: 20
+      #获取连接时最大等待时间(单位毫秒)
+      max-wait: 60000
+      #是否缓存preparedStatement
+      pool-prepared-statements: false
+      #用来检测连接是否有效的sql
+      validation-query: select 'x'
+      #申请连接时执行validationQuery检测连接是否有效
+      test-on-borrow: false
+      #归还连接时执行validationQuery检测连接是否有效
+      test-on-return: false
+      #如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+      test-while-idle: true
+      #在空闲时 每个1小时 访问一下数据库
+      time-between-eviction-runs-millis: 3600000
+
+  jackson:
+    time-zone: GMT+8
+    date-format: 'yyyy-MM-dd HH:mm:ss'
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+
+logging:
+  level:
+   com.jarvan.*: debug
+   org.springfromework.web: debug
+   org.mybatis: debug
+  file: D:\logs
+
