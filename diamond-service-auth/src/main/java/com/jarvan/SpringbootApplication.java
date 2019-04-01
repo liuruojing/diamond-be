@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication(scanBasePackages = "com.jarvan")
-@MapperScan("com.jarvan.mapper")
+@MapperScan("com.jarvan.*.mapper")
 @EnableScheduling
 @EnableSwagger2
 @EnableEurekaClient //服务注册

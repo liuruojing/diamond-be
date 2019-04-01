@@ -14,7 +14,7 @@ import lombok.Data;
  *     使用泛型是为了适应多种数据类型
  */
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 //jackson注解,null值不返回
 public class ServerResponse<T> implements Serializable{
 	private static final long serialVersionUID = 1L;

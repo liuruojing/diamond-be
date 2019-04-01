@@ -36,7 +36,7 @@ public class SwaggerConfig {
                 .groupName("spring")
                 .apiInfo(apiInfo())
                 .useDefaultResponseMessages(false)
-                .select().apis(RequestHandlerSelectors.basePackage("com.jarvan.controller"))
+                .select().apis(RequestHandlerSelectors.basePackage("com.jarvan"))
                 .paths(PathSelectors.any())
                 .build();
         watch.stop();

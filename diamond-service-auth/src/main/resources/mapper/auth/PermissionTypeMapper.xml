@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jarvan.auth.mapper.PermissionTypeMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.PermissionType">
+        <id column="id" property="id" />
+        <result column="per_type_name" property="perTypeName" />
+        <result column="created_time" property="createdTime" />
+        <result column="created_user_id" property="createdUserId" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_user_id" property="updatedUserId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, per_type_name, created_time, created_user_id, updated_time, updated_user_id
+    </sql>
+
+</mapper>

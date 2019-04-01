@@ -2,6 +2,7 @@ package com.jarvan.convert;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.springframework.core.convert.converter.Converter;
@@ -25,7 +26,7 @@ public class DateConverter implements Converter<String, Date> {
 
     @Override
     public Date convert(String source) {
-
+        log.info("转换日期");
         SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
         try {
             return formatter.parse(source);
