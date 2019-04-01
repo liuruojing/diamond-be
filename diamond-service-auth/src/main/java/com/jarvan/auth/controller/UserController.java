@@ -7,9 +7,11 @@ import com.jarvan.auth.service.UserService;
 import com.jarvan.response.ServerResponse;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 /**
@@ -37,25 +39,7 @@ public class UserController {
         return ServerResponse.success(userService.page(new Page<User>()));
     }
 
-    /**
-     * 新增用户
-     *
-     * @param
-     * @return
-     * @author liuruojing
-     * @since ${PROJECT_NAME} 0.1.0
-     */
-    @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "新增用户", notes = "新增用户")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful request"),
-            @ApiResponse(code = 400, message = "bad request"),
-            @ApiResponse(code = 404, message = "not found"),
-            @ApiResponse(code = 500, message = "internal server error") })
-    public ServerResponse<?> method(@RequestBody AddUserDto user) {
-        User userInfo = new User(user);
-        return ServerResponse.success(userService.save(userInfo));
-    }
+
 
 
 }

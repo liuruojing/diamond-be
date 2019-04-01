@@ -1,6 +1,7 @@
 package com.jarvan.config;
 
 import com.jarvan.convert.DateConverter;
+import com.jarvan.convert.LocalDateTimeCoverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -19,7 +20,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class CoverterConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addFormatters(FormatterRegistry registry) {
+
         registry.addConverter(new DateConverter());
+        registry.addConverter(new LocalDateTimeCoverter());
     }
 
 }
