@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import javax.xml.ws.Response;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -82,16 +84,11 @@ public class UserController {
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> method(
             @ApiParam(value = "userIds", required = true) @RequestParam(value = "userIds") String userIds) {
-        // 将id转成整型数组
-        String[] ids = userIds.split(",");
-        Long[] _ids = new Long[ids.length];
-        int i = 0;
-        for (String id : ids) {
-            _ids[i++] = Long.parseLong(id);
-        }
-        // 批量删除
-        userService.removeByIds(Arrays.asList(_ids));
-        return ServerResponse.success();
+       if(userService.deleteUsers(userIds))
+           return ServerResponse.success();
+       else
+           return ServerResponse.error(ResponseCode.NOT_FOUND,"用户不存在");
+
     }
 
     /**

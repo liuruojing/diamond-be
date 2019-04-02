@@ -36,4 +36,14 @@ public interface UserService extends IService<User> {
      * @since ${PROJECT_NAME} 0.1.0
      */
     boolean updateStatu(String id, short statu);
+
+    /**
+     * 批量删除用户
+     *
+     * @param userIds
+     * @return ture or false
+     * @author liuruojing
+     * @since ${PROJECT_NAME} 0.1.0
+     */
+    boolean deleteUsers(String userIds);
 }
