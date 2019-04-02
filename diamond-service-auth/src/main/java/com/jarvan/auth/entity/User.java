@@ -7,10 +7,8 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-
 /**
  * <p>
- * 
  * </p>
  *
  * @author liuruojing
@@ -24,8 +22,10 @@ public class User implements Serializable {
     private Long id;
 
     private String username;
+
     @JsonIgnore
     private String password;
+
     @JsonIgnore
     private String salt;
 
@@ -41,8 +41,10 @@ public class User implements Serializable {
     private String mobile;
 
     private String email;
+
     @JsonIgnore
     private LocalDateTime createdTime;
+
     @JsonIgnore
     private LocalDateTime updatedTime;
 
@@ -50,14 +52,27 @@ public class User implements Serializable {
 
     private String qq;
 
-
-    public User(Object otherUser){
-    Class<?> clazz = otherUser.getClass();
-    Field[] fields = clazz.getDeclaredFields();
-    for(Field field : fields){
-        System.out.print(field.getName());
+    public User(){
+        super();
     }
-    }
+    public User(Object otherUser) {
+        Class<?> clazz = otherUser.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                try {
+                    Field ufield = this.getClass()
+                            .getDeclaredField(field.getName());
+                    ufield.set(this, field.get(otherUser));
+                } catch (NoSuchFieldException e) {
+                    // do nothing
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("exception", e);
+            }
 
+        }
+    }
 
 }

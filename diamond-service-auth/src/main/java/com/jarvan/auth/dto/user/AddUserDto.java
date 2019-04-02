@@ -1,6 +1,7 @@
 package com.jarvan.auth.dto.user;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ public class AddUserDto {
     *@since ${PROJECT_NAME} 0.1.0
     */
     private Integer status;
-
-    private LocalDateTime createdTime;
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private LocalDateTime createdTime;
 
 }

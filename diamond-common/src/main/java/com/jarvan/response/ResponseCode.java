@@ -6,8 +6,9 @@ package com.jarvan.response;
  */
 public enum ResponseCode {
     SUCCESS(200, "SUCCESS"),
-    ERROR(500, "ERROR");
-
+    ERROR(500, "INNER SERVER ERROR"),
+    BAD_REQUEST(400,"BAD QUEST"),
+    NOT_FOUND(404,"NOT FOUND");
     private final int code;
     private final String desc;
 

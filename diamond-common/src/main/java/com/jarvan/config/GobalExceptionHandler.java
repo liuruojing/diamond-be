@@ -23,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 @Slf4j
 public class GobalExceptionHandler {
+
+
     /**
      * 全局异常捕捉处理
      * 

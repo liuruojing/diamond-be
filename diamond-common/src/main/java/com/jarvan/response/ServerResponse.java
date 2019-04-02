@@ -19,7 +19,7 @@ import lombok.Data;
 public class ServerResponse<T> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int status;
-    private String message = "服务器返回响应";
+    private String message = "success";
     private T data;
 
     private ServerResponse(int status) {
@@ -48,7 +48,7 @@ public class ServerResponse<T> implements Serializable{
         为返回正确的响应构造四种不同的方法，提供不同的正确的响应
      */
     public static <T> ServerResponse<T> success() {
-        return new ServerResponse<>(ResponseCode.SUCCESS.getCode());
+        return new ServerResponse<>(ResponseCode.SUCCESS.getCode(),ResponseCode.SUCCESS.getDesc());
     }
 
     public static <T> ServerResponse<T> success(String message) {
@@ -56,7 +56,7 @@ public class ServerResponse<T> implements Serializable{
     }
 
     public static <T> ServerResponse<T> success(T data) {
-        return new ServerResponse<>(ResponseCode.SUCCESS.getCode(), data);
+        return new ServerResponse<>(ResponseCode.SUCCESS.getCode(),ResponseCode.SUCCESS.getDesc(),data);
     }
 
     public static <T> ServerResponse<T> success(String message, T data) {
@@ -67,7 +67,7 @@ public class ServerResponse<T> implements Serializable{
        提供三种 返回错误 消息的 方法，  因为错误时不需要返回 data， 所以少两个方法
      */
     public static  <T> ServerResponse<T> error() {
-        return  new ServerResponse<>(ResponseCode.ERROR.getCode());
+        return  new ServerResponse<>(ResponseCode.ERROR.getCode(),ResponseCode.ERROR.getDesc());
     }
 
     public static  <T> ServerResponse<T> error(String message) {
@@ -75,9 +75,12 @@ public class ServerResponse<T> implements Serializable{
     }
 
     public static <T> ServerResponse<T> error(T data) {
-        return new ServerResponse<>(ResponseCode.ERROR.getCode(), data);
+        return new ServerResponse<>(ResponseCode.ERROR.getCode(), ResponseCode.ERROR.getDesc(), data);
     }
 
+    public static <T> ServerResponse<T> error(String message, T data) {
+        return new ServerResponse<>(ResponseCode.ERROR.getCode(), message, data);
+    }
     /*
         供其他情况使用， 比如  need_login， ILLEGAL_LOGIN  情况使用
      */
