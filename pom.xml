@@ -62,7 +62,6 @@
             </dependency>
 
 
-
         </dependencies>
     </dependencyManagement>
 
@@ -118,7 +117,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons.lang3.version}</version>
         </dependency>
-
+        <!--report-->
+        <dependency>
+            <groupId>com.richstonedt.nile</groupId>
+            <artifactId>auto-core-report</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 

@@ -11,11 +11,12 @@
         <result column="created_user_id" property="createdUserId" />
         <result column="updated_time" property="updatedTime" />
         <result column="updated_user_id" property="updatedUserId" />
+        <result column="per_ant" property="perAnt" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, per_name, per_type_id, created_time, created_user_id, updated_time, updated_user_id
+        id, per_name, per_type_id, created_time, created_user_id, updated_time, updated_user_id, per_ant
     </sql>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.jarvan.auth.entity;
 
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 import lombok.Data;
@@ -12,7 +13,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author liuruojing
- * @since 2019-03-29
+ * @since 2019-04-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -37,6 +38,11 @@ public class Permission implements Serializable {
     private LocalDateTime updatedTime;
 
     private Long updatedUserId;
+
+    /**
+     * 权限符,形如user:add
+     */
+    private String perAnt;
 
 
 }
