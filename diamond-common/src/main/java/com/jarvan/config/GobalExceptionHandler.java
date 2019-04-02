@@ -6,10 +6,12 @@
 
 package com.jarvan.config;
 
+import com.jarvan.response.ResponseCode;
 import com.jarvan.response.ServerResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * <b><code>GobalExceptionHandler</code></b>
@@ -24,7 +26,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GobalExceptionHandler {
 
-
+    /**
+     * springmvc 参数绑定异常处理
+     *
+     * @param
+     * @return
+     * @author liuruojing
+     * @since ${PROJECT_NAME} 0.1.0
+     */
+    @ExceptionHandler(value =MethodArgumentTypeMismatchException.class)
+    public Object argumentHandler(Exception e){
+        return ServerResponse.error(ResponseCode.BAD_REQUEST,"请求参数错误");
+    }
     /**
      * 全局异常捕捉处理
      * 
