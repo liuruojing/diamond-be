@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-04-04
  */
 @RestController
-@RequestMapping("/auth/permission")
-public class PermissionController {
+@RequestMapping("/auth/filter")
+public class FilterController {
 
 }

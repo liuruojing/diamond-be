@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author liuruojing
- * @since 2019-03-29
+ * @since 2019-04-04
  */
 @RestController
 @RequestMapping("/auth/permission-type")

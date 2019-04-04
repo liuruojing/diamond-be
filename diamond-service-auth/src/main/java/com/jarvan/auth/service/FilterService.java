@@ -1,6 +1,6 @@
 package com.jarvan.auth.service;
 
-import com.jarvan.auth.entity.RolePermissionRelation;
+import com.jarvan.auth.entity.Filter;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author liuruojing
  * @since 2019-04-04
  */
-public interface RolePermissionRelationService extends IService<RolePermissionRelation> {
+public interface FilterService extends IService<Filter> {
 
 }

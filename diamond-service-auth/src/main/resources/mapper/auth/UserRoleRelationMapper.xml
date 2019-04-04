@@ -21,7 +21,7 @@
 
 
     <delete id="deleteByUserIds" >
-        delete from user_role_relation
+        delete from auth_user_role_relation
         where user_id in
         <foreach collection="array" item="arr" index="no" open="("
                  separator="," close=")">

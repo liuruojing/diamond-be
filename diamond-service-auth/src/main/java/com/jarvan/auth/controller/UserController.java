@@ -3,8 +3,10 @@ package com.jarvan.auth.controller;
 import com.jarvan.auth.dto.user.AddUserDto;
 import com.jarvan.auth.entity.User;
 import com.jarvan.auth.service.UserService;
+import com.jarvan.encrypt.MD5;
 import com.jarvan.response.ResponseCode;
 import com.jarvan.response.ServerResponse;
+import com.jarvan.util.ClassUtil;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,10 @@ public class UserController {
             return ServerResponse.error(ResponseCode.BAD_REQUEST,
                     e.getMessage());
         }
-        User insertUser = new User(user);
+        //将dto转成实体类
+        User insertUser = ClassUtil.transfer(user,User.class);
+        //将密码进行MD5加密
+        insertUser.setPassword(MD5.encript(insertUser.getPassword()));
         insertUser.setCreatedTime(LocalDateTime.now());
         try {
             userService.save(insertUser);
@@ -70,7 +75,7 @@ public class UserController {
 
     /**
      * 删除用户
-     * 
+     *
      * @param userIds ids
      * @return
      * @author liuruojing
@@ -84,16 +89,16 @@ public class UserController {
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> method(
             @ApiParam(value = "userIds", required = true) @RequestParam(value = "userIds") String userIds) {
-       if(userService.deleteUsers(userIds))
-           return ServerResponse.success();
-       else
-           return ServerResponse.error(ResponseCode.NOT_FOUND,"用户不存在");
+        if(userService.deleteUsers(userIds))
+            return ServerResponse.success();
+        else
+            return ServerResponse.error(ResponseCode.NOT_FOUND,"用户不存在");
 
     }
 
     /**
      * 修改用户密码
-     * 
+     *
      * @param
      * @return
      * @author liuruojing

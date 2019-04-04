@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jarvan.auth.mapper.PermissionMapper">
+<mapper namespace="com.jarvan.auth.mapper.FilterMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.Permission">
+    <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.Filter">
         <id column="id" property="id" />
-        <result column="per_name" property="perName" />
         <result column="per_ant" property="perAnt" />
-        <result column="per_type_id" property="perTypeId" />
-        <result column="created_time" property="createdTime" />
+        <result column="operation_name" property="operationName" />
+        <result column="url" property="url" />
+        <result column="method" property="method" />
         <result column="created_user_id" property="createdUserId" />
-        <result column="updated_time" property="updatedTime" />
+        <result column="created_time" property="createdTime" />
         <result column="updated_user_id" property="updatedUserId" />
+        <result column="updated_time" property="updatedTime" />
         <result column="is_primary" property="isPrimary" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, per_name, per_ant, per_type_id, created_time, created_user_id, updated_time, updated_user_id, is_primary
+        id, per_ant, operation_name, url, method, created_user_id, created_time, updated_user_id, updated_time, is_primary
     </sql>
 
 </mapper>

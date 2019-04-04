@@ -1,6 +1,6 @@
 package com.jarvan.auth.mapper;
 
-import com.jarvan.auth.entity.RolePermissionRelation;
+import com.jarvan.auth.entity.Filter;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author liuruojing
  * @since 2019-04-04
  */
-public interface RolePermissionRelationMapper extends BaseMapper<RolePermissionRelation> {
+public interface FilterMapper extends BaseMapper<Filter> {
 
 }

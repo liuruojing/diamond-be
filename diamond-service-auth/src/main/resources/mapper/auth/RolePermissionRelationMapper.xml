@@ -2,10 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jarvan.auth.mapper.RolePermissionRelationMapper">
 
-
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.RolePermissionRelation">
-        <result column="id" property="id" />
+        <id column="id" property="id" />
         <result column="role_id" property="roleId" />
         <result column="permission_id" property="permissionId" />
         <result column="created_user_id" property="createdUserId" />

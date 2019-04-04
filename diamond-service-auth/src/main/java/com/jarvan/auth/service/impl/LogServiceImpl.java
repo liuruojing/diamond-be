@@ -1,8 +1,8 @@
 package com.jarvan.auth.service.impl;
 
-import com.jarvan.auth.entity.Role;
-import com.jarvan.auth.mapper.RoleMapper;
-import com.jarvan.auth.service.RoleService;
+import com.jarvan.auth.entity.Log;
+import com.jarvan.auth.mapper.LogMapper;
+import com.jarvan.auth.service.LogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2019-04-04
  */
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogService {
 
 }

@@ -20,17 +20,27 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("auth_role_permission_relation")
-public class RolePermissionRelation implements Serializable {
+@TableName("auth_filter")
+public class Filter implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long roleId;
+    /**
+     * 如perms[user:add,user:delete]
+     */
+    private String perAnt;
 
-    private Long permissionId;
+    /**
+     * 操作名，如新增用户
+     */
+    private String operationName;
+
+    private String url;
+
+    private String method;
 
     private Long createdUserId;
 
@@ -39,6 +49,11 @@ public class RolePermissionRelation implements Serializable {
     private Long updatedUserId;
 
     private LocalDateTime updatedTime;
+
+    /**
+     * 是否是系统自带配置
+     */
+    private Integer isPrimary;
 
 
 }

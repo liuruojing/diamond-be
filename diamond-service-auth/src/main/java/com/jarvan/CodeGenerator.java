@@ -67,7 +67,7 @@ public class CodeGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl(
-                "jdbc:mysql://localhost:3306/diamond_auth?useUnicode=true&useSSL=false&characterEncoding=utf8");
+                "jdbc:mysql://localhost:3306/diamond_auth_v1.0?useUnicode=true&useSSL=false&characterEncoding=utf8");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("123456");
