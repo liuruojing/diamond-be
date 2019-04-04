@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ *  用户管理服务类
  * </p>
  *
  * @author liuruojing
@@ -19,12 +19,13 @@ public interface UserService extends IService<User> {
     /**
      * 显示用户列表.
      *
-     * @param
+     * @param searchName
+     * @param roleId
      * @return
      * @author liuruojing
      * @since ${PROJECT_NAME} 0.1.0
      */
-    IPage<User> showUsers(int pageSize, int pageNum, String searchName);
+    IPage<User> showUsers(int pageSize, int pageNum, String searchName, Long roleId);
 
     /**
      * 根据id更新改用户的账户状态为可用或者不可用
@@ -35,7 +36,7 @@ public interface UserService extends IService<User> {
      * @author liuruojing
      * @since ${PROJECT_NAME} 0.1.0
      */
-    boolean updateStatu(String id, short statu);
+    boolean updateStatu(Long id, short statu);
 
     /**
      * 批量删除用户

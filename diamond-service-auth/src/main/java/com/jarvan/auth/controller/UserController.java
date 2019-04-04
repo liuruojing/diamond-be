@@ -35,7 +35,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     /**
      * 新增用户
      *
@@ -57,9 +56,9 @@ public class UserController {
             return ServerResponse.error(ResponseCode.BAD_REQUEST,
                     e.getMessage());
         }
-        //将dto转成实体类
-        User insertUser = ClassUtil.transfer(user,User.class);
-        //将密码进行MD5加密
+        // 将dto转成实体类
+        User insertUser = ClassUtil.transfer(user, User.class);
+        // 将密码进行MD5加密
         insertUser.setPassword(MD5.encript(insertUser.getPassword()));
         insertUser.setCreatedTime(LocalDateTime.now());
         try {
@@ -87,12 +86,12 @@ public class UserController {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 400, message = "bad request"),
             @ApiResponse(code = 500, message = "internal server error") })
-    public ServerResponse<?> method(
+    public ServerResponse<?> delete(
             @ApiParam(value = "userIds", required = true) @RequestParam(value = "userIds") String userIds) {
-        if(userService.deleteUsers(userIds))
+        if (userService.deleteUsers(userIds))
             return ServerResponse.success();
         else
-            return ServerResponse.error(ResponseCode.NOT_FOUND,"用户不存在");
+            return ServerResponse.error(ResponseCode.NOT_FOUND, "用户不存在");
 
     }
 
@@ -111,7 +110,7 @@ public class UserController {
             @ApiResponse(code = 400, message = "bad request"),
             @ApiResponse(code = 404, message = "not found"),
             @ApiResponse(code = 500, message = "internal server error") })
-    public ServerResponse<?> method(
+    public ServerResponse<?> update(
             @ApiParam(value = "id", required = true) @PathVariable(value = "id") long id,
             @ApiParam(value = "password", required = true) @RequestParam(value = "password") String password) {
         if (password.length() < 6 || password.length() > 15) {
@@ -139,8 +138,8 @@ public class UserController {
             @ApiResponse(code = 400, message = "bad request"),
             @ApiResponse(code = 404, message = "not found"),
             @ApiResponse(code = 500, message = "internal server error") })
-    public ServerResponse<?> method(
-            @ApiParam(value = "id", required = true) @PathVariable(value = "id") String id,
+    public ServerResponse<?> update(
+            @ApiParam(value = "id", required = true) @PathVariable(value = "id") Long id,
             @ApiParam(value = "statu", required = true) @RequestParam(value = "statu") short status) {
         if (userService.updateStatu(id, status))
             return ServerResponse.success();
@@ -149,7 +148,7 @@ public class UserController {
     }
 
     /**
-     * 显示用户列表.
+     * 显示用户列表，可根据用户名和所拥有的角色进行筛选.
      *
      * @param
      * @return
@@ -157,16 +156,23 @@ public class UserController {
      * @since ${PROJECT_NAME} 0.1.0
      */
     @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "用户列表", notes = "用户列表,支持根据searchName筛选查询")
+    @ApiOperation(value = "用户列表", notes = "用户列表,支持根据searchName、所拥有角色信息筛选查询")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> userList(
             @ApiParam(value = "pageNum", required = true) @RequestParam("pageNum") Integer pageNum,
             @ApiParam(value = "pageSize", required = true) @RequestParam("pageSize") Integer pageSize,
-            @ApiParam(value = "searchName") @RequestParam(value = "searchName", required = false) String searchName) {
-        return ServerResponse
-                .success(userService.showUsers(pageSize, pageNum, searchName));
+            @ApiParam(value = "searchName") @RequestParam(value = "searchName", required = false) String searchName,
+            @ApiParam(value = "roleId") @RequestParam(value = "roleId", required = false) Long roleId) {
+        if (pageNum < 1) {
+            pageNum = 1;
+        }
+        if (pageSize < 1) {
+            pageSize = 10;
+        }
+        return ServerResponse.success(
+                userService.showUsers(pageSize, pageNum, searchName, roleId));
     }
 
     private void check(AddUserDto user) {

@@ -4,24 +4,75 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.User">
-        <id column="id" property="id" />
-        <result column="username" property="username" />
-        <result column="password" property="password" />
-        <result column="salt" property="salt" />
-        <result column="sex" property="sex" />
-        <result column="age" property="age" />
-        <result column="status" property="status" />
-        <result column="mobile" property="mobile" />
-        <result column="email" property="email" />
-        <result column="created_time" property="createdTime" />
-        <result column="updated_time" property="updatedTime" />
-        <result column="wechat" property="wechat" />
-        <result column="qq" property="qq" />
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="status" property="status"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="wechat" property="wechat"/>
+        <result column="qq" property="qq"/>
     </resultMap>
-
+    <!--  -->
+    <resultMap id="roleNameResultMap" type="com.jarvan.auth.dto.user.UserRoleDto">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="status" property="status"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="wechat" property="wechat"/>
+        <result column="qq" property="qq"/>
+        <result column="role_name" property="roleName"/>
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, username, password, salt, sex, age, status, mobile, email, created_time, updated_time, wechat, qq
     </sql>
-
+    <sql id="Base_Column_List1">
+        a.id, username,  sex, age, status, mobile, email, a.created_time,  wechat, qq,role_name
+    </sql>
+    <sql id="Base_Column_List2">
+        c.id, username,  sex, age, status, mobile, email, c.created_time,  wechat, qq,role_name
+    </sql>
+    <select id="selectAll" resultMap="roleNameResultMap">
+        SELECT
+        <include refid="Base_Column_List1"/>
+        FROM
+        auth_user a,
+        auth_user_role_relation b,
+        auth_role c
+        where
+        <if test="searchName !=null and searchName !=''">
+            a.username LIKE CONCAT('%',searchName,'%') and
+        </if>
+        a.id=b.user_id and b.role_id=c.id
+        and b.role_id=#{roleId}
+    </select>
+    <select id="selectAlls" resultMap="roleNameResultMap">
+        select c.*,d.role_name from
+        (
+        SELECT
+        a.*,
+        b.role_id
+        FROM
+        auth_user a
+        left join
+        auth_user_role_relation b
+        on
+        <if test="searchName !=null and searchName !=''">
+            a.username LIKE CONCAT('%',searchName,'%')and
+        </if>
+        a.id=b.user_id
+        ) c
+        left join auth_role d on
+        c.role_id=d.id
+    </select>
 </mapper>

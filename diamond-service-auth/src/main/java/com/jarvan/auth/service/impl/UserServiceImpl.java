@@ -7,19 +7,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jarvan.auth.entity.User;
 import com.jarvan.auth.mapper.UserMapper;
 import com.jarvan.auth.mapper.UserRoleRelationMapper;
-import com.jarvan.auth.service.UserRoleRelationService;
 import com.jarvan.auth.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jarvan.response.ServerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * <p>
@@ -34,6 +29,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     @Autowired
     UserRoleRelationMapper userRoleRelationMapper;
+
+    @Autowired
+    UserMapper userMapper;
+
     @Override
     public boolean updatePasswordByUserId(long id, String password) {
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
@@ -43,18 +42,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public IPage<User> showUsers(int pageSize, int pageNum, String searchName) {
-        if (searchName != null) {
-            QueryWrapper<User> wrapper = new QueryWrapper<>();
-            return page(new Page<User>(pageNum, pageSize),
-                    wrapper.eq("username", searchName));
+    public IPage<User> showUsers(int pageSize, int pageNum, String searchName,
+            Long roleId) {
+        if (roleId != null) {
+            // where查询，仅查出赋予指定角色的用户
+            return userMapper.selectAll(new Page<User>(pageNum, pageSize),
+                    searchName, roleId);
         } else {
-            return page(new Page<User>(pageNum, pageSize));
+            // 左查询，可以查出所有用户，即使未授予角色的用户
+            return userMapper.selectAlls(new Page<User>(pageNum, pageSize),
+                    searchName);
         }
     }
 
     @Override
-    public boolean updateStatu(String id, short statu) {
+    public boolean updateStatu(Long id, short statu) {
         UpdateWrapper<User> wrapper = new UpdateWrapper();
         wrapper.set("status", statu);
         wrapper.set("updated_time", LocalDateTime.now());
@@ -73,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 批量删除用户
         boolean bool = removeByIds(Arrays.asList(_ids));
-        //删除用户与角色之间的关联关系
+        // 删除用户与角色之间的关联关系
         userRoleRelationMapper.deleteByUserIds(_ids);
         return bool;
     }
