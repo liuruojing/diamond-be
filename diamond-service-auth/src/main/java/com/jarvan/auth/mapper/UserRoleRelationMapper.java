@@ -15,5 +15,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRoleRelationMapper extends BaseMapper<UserRoleRelation> {
 
-    boolean deleteByUserIds(Long[] ids);
 }

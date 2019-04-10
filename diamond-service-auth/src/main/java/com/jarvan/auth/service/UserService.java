@@ -25,7 +25,7 @@ public interface UserService extends IService<User> {
      * @author liuruojing
      * @since ${PROJECT_NAME} 0.1.0
      */
-    IPage<User> showUsers(int pageSize, int pageNum, String searchName, Long roleId);
+    IPage<?> showUsers(int pageSize, int pageNum, String searchName, Long roleId);
 
     /**
      * 根据id更新改用户的账户状态为可用或者不可用
@@ -46,5 +46,15 @@ public interface UserService extends IService<User> {
      * @author liuruojing
      * @since ${PROJECT_NAME} 0.1.0
      */
-    boolean deleteUsers(String userIds);
+    void deleteUsers(String userIds);
+
+    /**
+     * 判断用户是否存在
+     *
+     * @param
+     * @return
+     * @author liuruojing
+     * @since ${PROJECT_NAME} 0.1.0
+     */
+    boolean checkUser(Long id);
 }

@@ -4,12 +4,20 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.Role">
-        <id column="id" property="id" />
-        <result column="role_name" property="roleName" />
-        <result column="created_time" property="createdTime" />
-        <result column="updated_time" property="updatedTime" />
-        <result column="creted_user_id" property="cretedUserId" />
-        <result column="updated_user_id" property="updatedUserId" />
+        <id column="id" property="id"/>
+        <result column="role_name" property="roleName"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="creted_user_id" property="cretedUserId"/>
+        <result column="updated_user_id" property="updatedUserId"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.jarvan.auth.dto.role.RoleDto">
+        <id column="id" property="id"/>
+        <result column="role_name" property="roleName"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_username" property="createdUserName"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -17,4 +25,13 @@
         id, role_name, created_time, updated_time, creted_user_id, updated_user_id
     </sql>
 
+    <sql id="Base_Column_List1">
+        auth_role.id, auth_role.role_name, auth_role.created_time, auth_role.updated_time, username
+    </sql>
+    <select id="selectAll" resultMap="BaseResultMap1">
+        select
+        <include refid="Base_Column_List1"/>
+        from auth_role left join auth_user on auth_role.creted_user_id=auth_user.id
+
+    </select>
 </mapper>

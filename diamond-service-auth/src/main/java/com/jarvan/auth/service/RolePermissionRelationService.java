@@ -3,6 +3,8 @@ package com.jarvan.auth.service;
 import com.jarvan.auth.entity.RolePermissionRelation;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RolePermissionRelationService extends IService<RolePermissionRelation> {
 
+    void deleteByRoleIds(List<Long> ids);
+
+    void deleteByPermissionIds(List<Long> ids);
 }

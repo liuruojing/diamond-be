@@ -54,7 +54,7 @@ public class User implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime createdTime;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime updatedTime;
 
     private String wechat;

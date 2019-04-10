@@ -1,20 +1,21 @@
 package com.jarvan.auth.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jarvan.auth.dto.user.UserRoleDto;
 import com.jarvan.auth.entity.User;
 import com.jarvan.auth.mapper.UserMapper;
-import com.jarvan.auth.mapper.UserRoleRelationMapper;
+import com.jarvan.auth.service.UserRoleRelationService;
 import com.jarvan.auth.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jarvan.util.ConvertUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -25,10 +26,11 @@ import java.util.Arrays;
  * @since 2019-03-29
  */
 @Service
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     @Autowired
-    UserRoleRelationMapper userRoleRelationMapper;
+    UserRoleRelationService userRoleRelationService;
 
     @Autowired
     UserMapper userMapper;
@@ -42,16 +44,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public IPage<User> showUsers(int pageSize, int pageNum, String searchName,
+    public IPage<?> showUsers(int pageSize, int pageNum, String searchName,
             Long roleId) {
         if (roleId != null) {
             // where查询，仅查出赋予指定角色的用户
-            return userMapper.selectAll(new Page<User>(pageNum, pageSize),
-                    searchName, roleId);
+            return userMapper.selectAll(
+                    new Page<UserRoleDto>(pageNum, pageSize), searchName,
+                    roleId);
         } else {
             // 左查询，可以查出所有用户，即使未授予角色的用户
-            return userMapper.selectAlls(new Page<User>(pageNum, pageSize),
-                    searchName);
+            return userMapper.selectAlls(
+                    new Page<UserRoleDto>(pageNum, pageSize), searchName);
         }
     }
 
@@ -65,18 +68,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     @Transactional
-    public boolean deleteUsers(String userIds) {
-        // 将id转成整型数组
-        String[] ids = userIds.split(",");
-        Long[] _ids = new Long[ids.length];
-        int i = 0;
-        for (String id : ids) {
-            _ids[i++] = Long.parseLong(id);
-        }
-        // 批量删除用户
-        boolean bool = removeByIds(Arrays.asList(_ids));
-        // 删除用户与角色之间的关联关系
-        userRoleRelationMapper.deleteByUserIds(_ids);
-        return bool;
+    public void deleteUsers(String userIds) {
+        List<Long> _ids = ConvertUtil.convert(userIds, ",");
+        log.debug("删除用户-角色授权关系");
+        userRoleRelationService.deleteByUserIds(_ids);
+        log.debug("删除用户 " + userIds);
+        removeByIds(_ids);
+
+    }
+
+    @Override
+    public boolean checkUser(Long id) {
+        return getById(id) != null ? true : false;
     }
 }

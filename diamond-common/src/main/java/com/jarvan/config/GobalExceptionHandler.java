@@ -26,6 +26,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 public class GobalExceptionHandler {
 
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public Object illegalArgumentHandler(Exception e) {
+        return ServerResponse.error(ResponseCode.BAD_REQUEST, e.getMessage());
+    }
+
     /**
      * springmvc 参数绑定异常处理
      *
@@ -34,10 +39,11 @@ public class GobalExceptionHandler {
      * @author liuruojing
      * @since ${PROJECT_NAME} 0.1.0
      */
-    @ExceptionHandler(value =MethodArgumentTypeMismatchException.class)
-    public Object argumentHandler(Exception e){
-        return ServerResponse.error(ResponseCode.BAD_REQUEST,"请求参数错误");
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public Object argumentHandler(Exception e) {
+        return ServerResponse.error(ResponseCode.BAD_REQUEST, "请求参数错误");
     }
+
     /**
      * 全局异常捕捉处理
      * 

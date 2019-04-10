@@ -57,7 +57,7 @@
         and b.role_id=#{roleId}
     </select>
     <select id="selectAlls" resultMap="roleNameResultMap">
-        select c.*,d.role_name from
+        select c.id,c.username,c.sex,c.age,c.status,c.mobile,c.email,c.created_time,c.wechat,c.qq,GROUP_CONCAT(d.role_name) role_name from
         (
         SELECT
         a.*,
@@ -73,6 +73,6 @@
         a.id=b.user_id
         ) c
         left join auth_role d on
-        c.role_id=d.id
+        c.role_id=d.id  GROUP BY c.id,c.username,c.sex,c.age,c.status,c.mobile,c.email,c.created_time,c.wechat,c.qq
     </select>
 </mapper>

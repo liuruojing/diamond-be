@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.xml.ws.Response;
 import java.time.LocalDateTime;
-import java.util.*;
 
 /**
  * <p>
@@ -27,7 +24,7 @@ import java.util.*;
  * @since 2019-03-29
  */
 @RestController
-@RequestMapping("/manage/auth")
+@RequestMapping("/manage")
 @Api(tags = "后台--用户管理")
 @Slf4j
 public class UserController {
@@ -88,10 +85,8 @@ public class UserController {
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> delete(
             @ApiParam(value = "userIds", required = true) @RequestParam(value = "userIds") String userIds) {
-        if (userService.deleteUsers(userIds))
+        userService.deleteUsers(userIds);
             return ServerResponse.success();
-        else
-            return ServerResponse.error(ResponseCode.NOT_FOUND, "用户不存在");
 
     }
 
