@@ -46,22 +46,26 @@ public class RoleController {
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> save(
             @ApiParam(value = "roleName", required = true) @RequestParam(value = "roleName") String roleName) {
-        if (roleName.trim().length() > 0) {
-            Role role = new Role();
-            role.setRoleName(roleName);
-            role.setCreatedTime(LocalDateTime.now());
-            try {
-                roleService.save(role);
-                return ServerResponse.success(role);
-            } catch (DuplicateKeyException e) {
-                return ServerResponse.error(ResponseCode.BAD_REQUEST,
-                        "角色名已经存在");
-            }
-        } else {
-            return ServerResponse.error(ResponseCode.BAD_REQUEST,
-                    "角色名不能由空白字符组成");
+        check(roleName);
+        Role role = new Role();
+        role.setRoleName(roleName);
+        role.setCreatedTime(LocalDateTime.now());
+        try {
+            roleService.save(role);
+            return ServerResponse.success(role);
+        } catch (DuplicateKeyException e) {
+            return ServerResponse.error(ResponseCode.BAD_REQUEST, "角色名已经存在");
         }
 
+    }
+
+    private void check(String roleName) {
+        if (roleName.contains(" ")) {
+            throw new IllegalArgumentException("角色名中不能包含空白字符");
+        }
+        if (roleName.length() < 2 || roleName.length() > 8) {
+            throw new IllegalArgumentException("角色名必须在[3,8]个字符长度之间");
+        }
     }
 
     /**
@@ -101,8 +105,8 @@ public class RoleController {
             @ApiResponse(code = 400, message = "参数类型错误"),
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> roleList(
-            @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize") Integer pageSize,
-            @ApiParam(value = "pageNum", required = true) @RequestParam(value = "pageNum") Integer pageNum) {
+            @ApiParam(value = "pageNum", required = true) @RequestParam(value = "pageNum") Integer pageNum,
+            @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize") Integer pageSize) {
         if (pageSize < 1) {
             pageSize = 10;
         }

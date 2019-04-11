@@ -12,6 +12,7 @@ import com.jarvan.util.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.awt.util.IdentityLinkedList;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -54,9 +55,13 @@ public class UserRoleRelationServiceImpl
 
     @Override
     public List<UserRoleRelation> selectRoleByUserId(Long userId) {
-        QueryWrapper<UserRoleRelation> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userId);
-        return list(wrapper);
+        if(userService.checkUser(userId)) {
+            QueryWrapper<UserRoleRelation> wrapper = new QueryWrapper<>();
+            wrapper.eq("user_id", userId);
+            return list(wrapper);
+        }else{
+            throw new IllegalArgumentException("用户不存在");
+        }
     }
 
     @Override
@@ -67,6 +72,7 @@ public class UserRoleRelationServiceImpl
             List<Long> list = new LinkedList<>();
             list.add(userId);
             deleteByUserIds(list);
+            if(roleIds!=null){
             // 2添加新的用户授权信息
             List<Long> _roleIds = ConvertUtil.convert(roleIds, ",");
             List<UserRoleRelation> relations = new LinkedList<>();
@@ -82,9 +88,9 @@ public class UserRoleRelationServiceImpl
             }
             if (relations.size() > 0) {
                 saveBatch(relations);
-            }
+            }}
         } else {
-            throw new IllegalArgumentException("请不要为不存在的用户授权");
+            throw new IllegalArgumentException("用户不存在");
         }
     }
 }

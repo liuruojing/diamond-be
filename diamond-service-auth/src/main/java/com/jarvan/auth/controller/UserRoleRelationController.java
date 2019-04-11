@@ -46,7 +46,7 @@ public class UserRoleRelationController {
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> authorization(
             @ApiParam(value = "userId", required = true) @PathVariable(value = "userId") Long userId,
-            @ApiParam(value = "roleIds", required = true) @RequestParam(value = "roleIds") String roleIds) {
+            @ApiParam(value = "roleIds", required = false) @RequestParam(value = "roleIds",required = false) String roleIds) {
         userRoleRelationService.authorization(userId, roleIds);
         return ServerResponse.success();
     }

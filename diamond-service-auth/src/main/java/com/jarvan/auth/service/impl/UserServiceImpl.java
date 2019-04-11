@@ -1,5 +1,6 @@
 package com.jarvan.auth.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -30,10 +31,10 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     @Autowired
-    UserRoleRelationService userRoleRelationService;
+    private UserRoleRelationService userRoleRelationService;
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Override
     public boolean updatePasswordByUserId(long id, String password) {
@@ -70,10 +71,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Transactional
     public void deleteUsers(String userIds) {
         List<Long> _ids = ConvertUtil.convert(userIds, ",");
+        if (_ids.size() == 1) {
+            if (!checkUser(_ids.get(0))) {
+                throw new IllegalArgumentException("用户不存在");
+            }
+        }
         log.debug("删除用户-角色授权关系");
         userRoleRelationService.deleteByUserIds(_ids);
-        log.debug("删除用户 " + userIds);
-        removeByIds(_ids);
+        log.debug("更新用户 " + userIds+" 状态为注销");
+        UpdateWrapper<User> wrapper = new UpdateWrapper<>();
+        wrapper.set("status",-1);
+        wrapper.in("id",_ids);
+        update(wrapper);
 
     }
 

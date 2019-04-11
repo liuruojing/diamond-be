@@ -51,13 +51,17 @@
         auth_role c
         where
         <if test="searchName !=null and searchName !=''">
-            a.username LIKE CONCAT('%',searchName,'%') and
+            a.username LIKE CONCAT('%',#{searchName},'%') and
         </if>
+        a.status !=-1 and
         a.id=b.user_id and b.role_id=c.id
         and b.role_id=#{roleId}
     </select>
     <select id="selectAlls" resultMap="roleNameResultMap">
-        select c.id,c.username,c.sex,c.age,c.status,c.mobile,c.email,c.created_time,c.wechat,c.qq,GROUP_CONCAT(d.role_name) role_name from
+        select * from(
+        select
+        c.id,c.username,c.sex,c.age,c.status,c.mobile,c.email,c.created_time,c.wechat,c.qq,GROUP_CONCAT(d.role_name)
+        role_name from
         (
         SELECT
         a.*,
@@ -68,11 +72,12 @@
         auth_user_role_relation b
         on
         <if test="searchName !=null and searchName !=''">
-            a.username LIKE CONCAT('%',searchName,'%')and
+            a.username LIKE CONCAT('%',#{searchName},'%') and
         </if>
         a.id=b.user_id
         ) c
         left join auth_role d on
-        c.role_id=d.id  GROUP BY c.id,c.username,c.sex,c.age,c.status,c.mobile,c.email,c.created_time,c.wechat,c.qq
+        c.role_id=d.id GROUP BY c.id,c.username,c.sex,c.age,c.status,c.mobile,c.email,c.created_time,c.wechat,c.qq
+        ) d where status!=-1
     </select>
 </mapper>

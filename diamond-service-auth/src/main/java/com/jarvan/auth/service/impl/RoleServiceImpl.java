@@ -48,6 +48,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     @Transactional
     public void delete(String ids) {
         List<Long> _ids = ConvertUtil.convert(ids, ",");
+        if (_ids.size() == 1) {
+            if(!checkRole(_ids.get(0))){
+                throw new IllegalArgumentException("用户不存在");
+            }
+        }
         // 删除用户与角色之间的关联
         log.debug("删除角色-用户关联关系");
         userRoleRelationService.deleteByRoleIds(_ids);
