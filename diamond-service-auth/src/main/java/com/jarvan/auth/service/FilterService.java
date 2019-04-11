@@ -1,7 +1,12 @@
 package com.jarvan.auth.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.jarvan.auth.dto.filter.FilterDto;
 import com.jarvan.auth.entity.Filter;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -13,4 +18,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface FilterService extends IService<Filter> {
 
+    IPage<FilterDto> showAll(Long pageNum, Long pageSize);
+
+    void delete(String ids);
+
+    FilterDto showDetail(Long id);
+
+    void upload(MultipartFile file) throws IOException, IllegalAccessException, NoSuchFieldException, InstantiationException;
 }

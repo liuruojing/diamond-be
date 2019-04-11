@@ -4,16 +4,28 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.Filter">
-        <id column="id" property="id" />
-        <result column="per_ant" property="perAnt" />
-        <result column="operation_name" property="operationName" />
-        <result column="url" property="url" />
-        <result column="method" property="method" />
-        <result column="created_user_id" property="createdUserId" />
-        <result column="created_time" property="createdTime" />
-        <result column="updated_user_id" property="updatedUserId" />
-        <result column="updated_time" property="updatedTime" />
-        <result column="is_primary" property="isPrimary" />
+        <id column="id" property="id"/>
+        <result column="per_ant" property="perAnt"/>
+        <result column="operation_name" property="operationName"/>
+        <result column="url" property="url"/>
+        <result column="method" property="method"/>
+        <result column="created_user_id" property="createdUserId"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_user_id" property="updatedUserId"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="is_primary" property="isPrimary"/>
+    </resultMap>
+
+    <resultMap id="ResultDto" type="com.jarvan.auth.dto.filter.FilterDto">
+        <id column="id" property="id"/>
+        <result column="per_ant" property="perAnt"/>
+        <result column="operation_name" property="operationName"/>
+        <result column="url" property="url"/>
+        <result column="method" property="method"/>
+        <result column="created_username" property="createdUserName"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_username" property="updatedUserName"/>
+        <result column="updated_time" property="updatedTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -21,4 +33,41 @@
         id, per_ant, operation_name, url, method, created_user_id, created_time, updated_user_id, updated_time, is_primary
     </sql>
 
+
+    <select id="showDetail" resultMap="ResultDto">
+        select dto.*,auth_user.username as updated_username from(
+        SELECT
+        auth_filter.id,
+        auth_filter.operation_name,
+        auth_filter.per_ant,
+        auth_filter.url,
+        auth_filter.method,
+        auth_filter.created_time,
+        auth_filter.updated_time,
+        auth_user.username AS created_username,
+        auth_filter.updated_user_id
+        from auth_filter
+        LEFT JOIN
+        auth_user
+        ON auth_filter.created_user_id = auth_user.id where auth_filter.is_primary!=1 and auth_filter.id=#{id})dto LEFT JOIN
+        auth_user on dto.updated_user_id=auth_user.id ORDER BY id
+    </select>
+    <select id="selectAll" resultMap="ResultDto">
+        select dto.*,auth_user.username as updated_username from(
+SELECT
+	auth_filter.id,
+	auth_filter.operation_name,
+	auth_filter.per_ant,
+	auth_filter.url,
+	auth_filter.method,
+	auth_filter.created_time,
+	auth_filter.updated_time,
+	auth_user.username AS created_username,
+	auth_filter.updated_user_id
+from auth_filter
+LEFT JOIN
+auth_user
+ON auth_filter.created_user_id = auth_user.id where auth_filter.is_primary!=1)dto LEFT JOIN
+auth_user on dto.updated_user_id=auth_user.id ORDER BY id
+    </select>
 </mapper>
