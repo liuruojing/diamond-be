@@ -47,12 +47,7 @@ public class UserController {
             @ApiResponse(code = 400, message = "bad request"),
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> save(@RequestBody AddUserDto user) {
-        try {
-            check(user);
-        } catch (IllegalArgumentException e) {
-            return ServerResponse.error(ResponseCode.BAD_REQUEST,
-                    e.getMessage());
-        }
+        check(user);
         // 将dto转成实体类
         User insertUser = ClassUtil.transfer(user, User.class);
         // 将密码进行MD5加密
@@ -63,7 +58,7 @@ public class UserController {
             log.info("新增用户成功" + insertUser);
             return ServerResponse.success(insertUser);
         } catch (DuplicateKeyException e) {
-            log.debug("用户名已存在", e);
+            log.debug("用户名已存在" + insertUser);
             return ServerResponse.error(ResponseCode.BAD_REQUEST, "用户名已存在");
         }
 
@@ -86,7 +81,7 @@ public class UserController {
     public ServerResponse<?> delete(
             @ApiParam(value = "userIds", required = true) @RequestParam(value = "userIds") String userIds) {
         userService.deleteUsers(userIds);
-            return ServerResponse.success();
+        return ServerResponse.success();
 
     }
 
@@ -109,8 +104,7 @@ public class UserController {
             @ApiParam(value = "id", required = true) @PathVariable(value = "id") long id,
             @ApiParam(value = "password", required = true) @RequestParam(value = "password") String password) {
         if (password.length() < 6 || password.length() > 15) {
-            return ServerResponse.error(ResponseCode.BAD_REQUEST,
-                    "密码长度必须在[6,15]个字符长度之间");
+            throw new IllegalArgumentException("密码长度必须在[6,15]个字符长度之间");
         }
         if (userService.updatePasswordByUserId(id, password))
             return ServerResponse.success();
@@ -136,6 +130,7 @@ public class UserController {
     public ServerResponse<?> update(
             @ApiParam(value = "id", required = true) @PathVariable(value = "id") Long id,
             @ApiParam(value = "statu", required = true) @RequestParam(value = "statu") short status) {
+        check(status);
         if (userService.updateStatu(id, status))
             return ServerResponse.success();
         else
@@ -171,13 +166,23 @@ public class UserController {
     }
 
     private void check(AddUserDto user) {
-        if (user.getUsername().length() < 3
+        if (user.getUsername().contains(" ")) {
+
+            throw new IllegalArgumentException("用户名不能包含空白字符");
+        }
+        if (user.getUsername().length() < 4
                 || user.getUsername().length() > 8) {
             throw new IllegalArgumentException("用户名必须在[4,8]个字符长度之间");
         }
         if (user.getPassword().length() < 6
                 || user.getPassword().length() > 15) {
-            throw new IllegalArgumentException("密码长度必须在[6,15]个字符长度之间");
+            throw new IllegalArgumentException("密码必须在[6,15]个字符长度之间");
+        }
+    }
+
+    private void check(short status) {
+        if (status != 1 && status != 2) {
+            throw new IllegalArgumentException("用户状态码错误");
         }
     }
 }
