@@ -24,14 +24,22 @@
     <sql id="Base_Column_List">
         id, role_name, created_time, updated_time, creted_user_id, updated_user_id
     </sql>
-
-    <sql id="Base_Column_List1">
-        auth_role.id, auth_role.role_name, auth_role.created_time, auth_role.updated_time, username
-    </sql>
     <select id="selectAll" resultMap="BaseResultMap1">
-        select
-        <include refid="Base_Column_List1"/>
-        from auth_role left join auth_user on auth_role.creted_user_id=auth_user.id
-
+       SELECT
+	dto.*, auth_user.username AS updated_username
+FROM
+	(
+		SELECT
+			auth_role.id,
+			auth_role.role_name,
+			auth_role.created_time,
+			auth_role.updated_time,
+			username AS created_username,
+			updated_user_id
+		FROM
+			auth_role
+		LEFT JOIN auth_user ON auth_role.creted_user_id = auth_user.id
+	) dto
+LEFT JOIN auth_user ON dto.updated_user_id = auth_user.id
     </select>
 </mapper>

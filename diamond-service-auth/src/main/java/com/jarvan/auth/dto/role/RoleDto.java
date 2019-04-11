@@ -27,6 +27,7 @@ public class RoleDto implements Serializable {
 
     private String createdUserName;
 
+    private String updatedUserName;
     @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime createdTime;
 
