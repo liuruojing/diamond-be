@@ -34,8 +34,8 @@ public class FilterServiceImpl extends ServiceImpl<FilterMapper, Filter>
     private FilterMapper filterMapper;
 
     @Override
-    public IPage<FilterDto> showAll(Long pageNum, Long pageSize) {
-        return filterMapper.selectAll(new Page<FilterDto>(pageNum, pageSize));
+    public IPage<FilterDto> showAll(String searchName, Long pageNum, Long pageSize) {
+        return filterMapper.selectAll(new Page<FilterDto>(pageNum, pageSize),searchName);
 
     }
 
@@ -62,7 +62,7 @@ public class FilterServiceImpl extends ServiceImpl<FilterMapper, Filter>
         }
         //1删除之前的配置
         QueryWrapper<Filter> wrapper = new QueryWrapper<>();
-        wrapper.notIn("is_primary",1);
+        wrapper.eq("is_primary",0);
         remove(wrapper);
         //2保存新配置
         saveBatch(records);

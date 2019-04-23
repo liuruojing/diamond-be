@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -38,19 +40,21 @@ public class Permission implements Serializable {
     /**
      * 所属权限类型
      */
+    @JsonIgnore
     private Long perTypeId;
-
+    @JsonIgnore
     private LocalDateTime createdTime;
-
+    @JsonIgnore
     private Long createdUserId;
-
+    @JsonIgnore
     private LocalDateTime updatedTime;
-
+    @JsonIgnore
     private Long updatedUserId;
 
     /**
      * 项目初始化时配置的权限，不可删除
      */
+    @JsonIgnore
     private Integer isPrimary;
 
 

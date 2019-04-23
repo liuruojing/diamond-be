@@ -53,21 +53,30 @@
         auth_user on dto.updated_user_id=auth_user.id ORDER BY id
     </select>
     <select id="selectAll" resultMap="ResultDto">
-        select dto.*,auth_user.username as updated_username from(
-SELECT
-	auth_filter.id,
-	auth_filter.operation_name,
-	auth_filter.per_ant,
-	auth_filter.url,
-	auth_filter.method,
-	auth_filter.created_time,
-	auth_filter.updated_time,
-	auth_user.username AS created_username,
-	auth_filter.updated_user_id
-from auth_filter
-LEFT JOIN
-auth_user
-ON auth_filter.created_user_id = auth_user.id where auth_filter.is_primary!=1)dto LEFT JOIN
-auth_user on dto.updated_user_id=auth_user.id ORDER BY id
+        SELECT
+        dto.*, auth_user.username AS updated_username
+        FROM
+        (
+        SELECT
+        dtos.*, auth_user.username AS created_username
+        FROM
+        (
+        SELECT
+        auth_filter.*
+        FROM
+        auth_filter
+        WHERE
+        is_primary = 0
+        <if test="searchName !=null and searchName !=''">
+            and auth_filter.operation_name LIKE CONCAT('%',#{searchName},'%')
+        </if>
+        ) dtos
+        LEFT JOIN auth_user ON dtos.created_user_id = auth_user.id
+        ) dto
+        LEFT JOIN auth_user ON dto.updated_user_id = auth_user.id
+        ORDER BY
+        id
+
+
     </select>
 </mapper>

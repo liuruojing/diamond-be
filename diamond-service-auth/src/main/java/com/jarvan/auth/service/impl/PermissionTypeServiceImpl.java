@@ -1,13 +1,10 @@
 package com.jarvan.auth.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ctc.wstx.util.DataUtil;
 import com.jarvan.auth.dto.permissionType.PermissionTypeDto;
 import com.jarvan.auth.entity.Permission;
 import com.jarvan.auth.entity.PermissionType;
-import com.jarvan.auth.mapper.PermissionMapper;
 import com.jarvan.auth.mapper.PermissionTypeMapper;
 import com.jarvan.auth.service.PermissionService;
 import com.jarvan.auth.service.PermissionTypeService;
@@ -18,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Wrapper;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,18 +50,35 @@ public class PermissionTypeServiceImpl
 
     @Override
     @Transactional
-    public void delete(String ids) {
+    public void delete(String ids, boolean bool) {
         List<Long> _ids = ConvertUtil.convert(ids, ",");
-        log.debug("将从属于" + ids + "权限类型的权限置为游离权限");
-        permissionService.updatePerTypeToUncorrelated(_ids);
+        if (bool) {
+            log.debug("将从属于 " + ids + " 权限类型的权限删除");
+            permissionService.deleteByPerTypeId(_ids);
+        } else {
+            log.debug("将从属于" + ids + "权限类型的权限置为游离权限");
+            permissionService.updatePerTypeToUncorrelated(_ids);
+        }
         log.debug("删除" + ids + "权限类型");
         removeByIds(_ids);
 
     }
 
     @Override
-    public IPage<PermissionTypeDto> selectAll(Integer pageNum, Integer pageSize, String searchName) {
-        return permissionTypeMapper.selectAll(new Page<PermissionType>(pageNum,pageSize),searchName);
+    public IPage<PermissionTypeDto> selectAll(Integer pageNum, Integer pageSize,
+            String searchName) {
+        return permissionTypeMapper.selectAll(
+                new Page<PermissionType>(pageNum, pageSize), searchName);
 
+    }
+
+    @Override
+    public List<Permission> selectPermissionListByPermissionTypeId(Long id) {
+        return permissionService.selectByTypeId(id);
+    }
+
+    @Override
+    public boolean checkPermissionType(Long id) {
+        return getById(id) != null ? true : false;
     }
 }

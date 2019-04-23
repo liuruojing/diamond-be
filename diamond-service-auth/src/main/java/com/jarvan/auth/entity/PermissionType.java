@@ -36,7 +36,7 @@ public class PermissionType implements Serializable {
     @JsonIgnore
     private Long createdUserId;
 
-    @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
+    @JsonIgnore
     private LocalDateTime updatedTime;
 
     @JsonIgnore

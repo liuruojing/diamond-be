@@ -31,12 +31,12 @@ public class PermissionTypeDto {
     @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime createdTime;
 
-    @JsonIgnore
+
     private String createdUserName;
 
     @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime updatedTime;
 
-    @JsonIgnore
+
     private String updatedUserName;
 }

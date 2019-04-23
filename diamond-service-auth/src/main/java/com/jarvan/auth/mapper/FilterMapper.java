@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jarvan.auth.dto.filter.FilterDto;
 import com.jarvan.auth.entity.Filter;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FilterMapper extends BaseMapper<Filter> {
 
-    IPage<FilterDto> selectAll(Page<FilterDto> filterDtoPage);
+    IPage<FilterDto> selectAll(Page<FilterDto> filterDtoPage, @Param("searchName") String searchName);
 
     FilterDto showDetail(Long id);
 }

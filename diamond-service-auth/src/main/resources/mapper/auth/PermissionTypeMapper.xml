@@ -3,21 +3,30 @@
 <mapper namespace="com.jarvan.auth.mapper.PermissionTypeMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.jarvan.auth.entity.PermissionType">
-        <id column="id" property="id" />
-        <result column="per_type_name" property="perTypeName" />
-        <result column="created_time" property="createdTime" />
-        <result column="created_user_id" property="createdUserId" />
-        <result column="updated_time" property="updatedTime" />
-        <result column="updated_user_id" property="updatedUserId" />
-        <result column="is_primary" property="isPrimary" />
+    <resultMap id="BaseResultMap" type="com.jarvan.auth.dto.permissionType.PermissionTypeDto">
+        <id column="id" property="id"/>
+        <result column="per_type_name" property="perTypeName"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_user_name" property="createdUserName"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_user_name" property="updatedUserName"/>
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id, per_type_name, created_time, created_user_id, updated_time, updated_user_id, is_primary
-    </sql>
-    <select id="selectAll">
 
+    <select id="selectAll" resultMap="BaseResultMap">
+        select b.*,auth_user.username as updated_username from(
+        select a.*,auth_user.username as created_username from(
+        SELECT
+        auth_permission_type.*
+        FROM
+        auth_permission_type
+        WHERE
+        is_primary = 0
+        <if test="searchName !=null and searchName !=''">
+            and auth_permission_type.per_type_name LIKE CONCAT('%',#{searchName},'%')
+        </if>
+        ) a
+        LEFT JOIN auth_user ON created_user_id = auth_user.id)b
+        left join auth_user ON created_user_id = auth_user.id
     </select>
 </mapper>

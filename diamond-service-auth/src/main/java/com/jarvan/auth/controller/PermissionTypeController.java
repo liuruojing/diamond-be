@@ -2,6 +2,7 @@ package com.jarvan.auth.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jarvan.auth.dto.permissionType.PermissionTypeDto;
+import com.jarvan.auth.entity.Permission;
 import com.jarvan.auth.entity.PermissionType;
 import com.jarvan.auth.service.PermissionTypeService;
 import com.jarvan.response.ResponseCode;
@@ -14,6 +15,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>
  * 权限类型控制器
@@ -25,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/manage")
 @Slf4j
-@Api(tags = "后台--权限类型管理")
+@Api(tags = "后台--权限管理")
 public class PermissionTypeController {
     @Autowired
     private PermissionTypeService permissionTypeService;
@@ -56,31 +59,49 @@ public class PermissionTypeController {
             @ApiResponse(code = 404, message = "not found"),
             @ApiResponse(code = 500, message = "internal server error") })
     public ServerResponse<?> delete(
-            @ApiParam(value = "ids", required = true) @RequestParam(value = "ids") String ids) {
-        permissionTypeService.delete(ids);
+            @ApiParam(value = "ids", required = true) @RequestParam(value = "ids") String ids,
+            @ApiParam(value = "deletePermission", required = true) @RequestParam(value = "deletePermission") boolean bool) {
+        permissionTypeService.delete(ids,bool);
         log.info("删除权限类型" + ids + "成功!");
         return ServerResponse.success();
 
     }
+
     @GetMapping(value = "/permission-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ApiOperation(value = "查询权限类型列表", notes = "可根据权限名称模糊查询")
     @ApiResponses(value = {
-                @ApiResponse(code = 200, message = "successful request"),
-                @ApiResponse(code = 400, message = "bad request"),
-                @ApiResponse(code = 404, message = "not found"),
-                @ApiResponse(code = 500, message = "internal server error") })
-        public ServerResponse<?> selectAll(@ApiParam(value = "pageNum", required = true) @RequestParam(value = "pageNum") Integer pageNum,
-                                           @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize") Integer pageSize,
-                                           @ApiParam(value = "searchName", required = true) @RequestParam(value = "searchName") String searchName){
-        if(pageNum<=0){
-            pageNum=1;
+            @ApiResponse(code = 200, message = "successful request"),
+            @ApiResponse(code = 400, message = "bad request"),
+            @ApiResponse(code = 404, message = "not found"),
+            @ApiResponse(code = 500, message = "internal server error") })
+    public ServerResponse<?> selectAll(
+            @ApiParam(value = "pageNum", required = true) @RequestParam(value = "pageNum") Integer pageNum,
+            @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize") Integer pageSize,
+            @ApiParam(value = "searchName") @RequestParam(value = "searchName", required = false) String searchName) {
+        if (pageNum <= 0) {
+            pageNum = 1;
         }
-        if(pageSize<=0){
-            pageNum=10;
+        if (pageSize <= 0) {
+            pageNum = 10;
         }
-        IPage<PermissionTypeDto> page = permissionTypeService.selectAll(pageNum,pageSize,searchName);
+        IPage<PermissionTypeDto> page = permissionTypeService.selectAll(pageNum,
+                pageSize, searchName);
         return ServerResponse.success(page);
-        }
+    }
+
+    @GetMapping(value = "/permission-type/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "显示该权限类型下的所有权限信息列表", notes = "如果不传显示游离权限")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful request"),
+            @ApiResponse(code = 400, message = "bad request"),
+            @ApiResponse(code = 404, message = "not found"),
+            @ApiResponse(code = 500, message = "internal server error") })
+    public ServerResponse<?> selectByTypeId(
+            @ApiParam(value = "id", required = true) @PathVariable(value = "id") Long id) {
+
+        return ServerResponse.success(permissionTypeService
+                .selectPermissionListByPermissionTypeId(id));
+    }
 
     private void check(String name) {
         if ("".equals(name.trim()) || name.contains(" ")) {
@@ -90,5 +111,4 @@ public class PermissionTypeController {
             throw new IllegalArgumentException("权限类型名称必须在[3,8]个长度之间");
         }
     }
-
 }

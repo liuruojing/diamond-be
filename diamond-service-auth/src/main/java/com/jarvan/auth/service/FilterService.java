@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public interface FilterService extends IService<Filter> {
 
-    IPage<FilterDto> showAll(Long pageNum, Long pageSize);
+    IPage<FilterDto> showAll(String searchName, Long pageNum, Long pageSize);
 
     void delete(String ids);
 

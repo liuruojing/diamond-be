@@ -31,27 +31,28 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/manage")
 @Slf4j
-@Api(tags = "后台--url拦截规则配置")
+@Api(tags = "后台--资源管理")
 public class FilterController {
     @Autowired
     private FilterService filterService;
 
     @GetMapping(value = "/filters", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "查看已配置的权限拦截信息列表", notes = " ")
+    @ApiOperation(value = "查看已配置的资源信息列表", notes = " ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 400, message = "bad request"),
             @ApiResponse(code = 404, message = "not found"),
             @ApiResponse(code = 500, message = "internal server error") })
-    public ServerResponse<?> show(
+    public ServerResponse<?> showAll(
+            @ApiParam(value = "searchName") @RequestParam(value = "searchName",required = false) String searchName,
             @ApiParam(value = "pageNum", required = true) @RequestParam(value = "pageNum") Long pageNum,
             @ApiParam(value = "pageSize", required = true) @RequestParam(value = "pageSize") Long pageSize) {
 
-        return ServerResponse.success(filterService.showAll(pageNum, pageSize));
+        return ServerResponse.success(filterService.showAll(searchName,pageNum, pageSize));
     }
 
-    @DeleteMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "删除指定的权限配置（支持批量删除）", notes = " ")
+    @DeleteMapping(value = "/filter/{ids}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "删除指定的资源配置（支持批量删除）", notes = " ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 400, message = "bad request"),
@@ -64,7 +65,7 @@ public class FilterController {
     }
 
     @PutMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "修改拦截规则", notes = " ")
+    @ApiOperation(value = "修改资源配置", notes = " ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 400, message = "bad request"),
@@ -78,12 +79,12 @@ public class FilterController {
         if (filterService.updateById(filter)) {
             return ServerResponse.success();
         } else {
-            return ServerResponse.error(ResponseCode.NOT_FOUND, "拦截规则不存在");
+            return ServerResponse.error(ResponseCode.NOT_FOUND, "资源配置不存在");
         }
     }
 
     @GetMapping(value = "/filter/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "显示某个拦截规则的具体信息", notes = " ")
+    @ApiOperation(value = "显示某个资源配置的具体信息", notes = " ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 400, message = "bad request"),
@@ -95,13 +96,13 @@ public class FilterController {
         if (data != null) {
             return ServerResponse.success(data);
         } else {
-            return ServerResponse.error(ResponseCode.NOT_FOUND, "拦截规则不存在");
+            return ServerResponse.error(ResponseCode.NOT_FOUND, "资源配置不存在");
         }
 
     }
 
     @GetMapping(value = "/filter/templet/download", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "下载拦截规则配置模板", notes = " ")
+    @ApiOperation(value = "下载资源配置模板", notes = " ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 404, message = "not found"),
@@ -110,12 +111,12 @@ public class FilterController {
             HttpServletResponse response) throws IOException {
 
         InputStream in = this.getClass().getClassLoader().getResourceAsStream(
-                "template" + File.separator + "权限拦截配置表.xlsx");
-        FileUtil.download(in, request, response, "权限拦截配置表.xlsx");
+                "template" + File.separator + "资源配置表.xlsx");
+        FileUtil.download(in, request, response, "资源配置表.xlsx");
     }
 
     @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "上传权限拦截配置", notes = " ")
+    @ApiOperation(value = "上传资源配置文件", notes = "注意！！！此操作会删除之前所有配置的资源哦 ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful request"),
             @ApiResponse(code = 400, message = "bad request"),
