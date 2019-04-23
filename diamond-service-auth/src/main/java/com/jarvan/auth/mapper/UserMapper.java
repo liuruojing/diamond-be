@@ -2,7 +2,7 @@ package com.jarvan.auth.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jarvan.auth.dto.user.UserRoleDto;
+import com.jarvan.auth.dto.user.UserDto;
 import com.jarvan.auth.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
 
-    IPage<User> selectAll(Page<UserRoleDto> userPage, @Param("searchName") String searchName,@Param("roleId") Long roleId);
+    IPage<User> selectAll(Page<UserDto> userPage, @Param("searchName") String searchName, @Param("roleId") Long roleId);
 
-    IPage<User> selectAlls(Page<UserRoleDto> userPage, @Param("searchName") String searchName);
+    IPage<User> selectAlls(Page<UserDto> userPage, @Param("searchName") String searchName);
 }

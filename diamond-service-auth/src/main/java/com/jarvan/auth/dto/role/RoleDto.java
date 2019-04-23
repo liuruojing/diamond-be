@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * <b><code>RoleDto</code></b>
  * <p>
- * Description.
+ * 角色列表显示dto.
  * <p>
  * <b>Creation Time:</b> 2019/4/4 17:42.
  *

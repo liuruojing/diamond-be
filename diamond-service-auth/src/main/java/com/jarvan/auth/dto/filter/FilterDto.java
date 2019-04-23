@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * <b><code>FilterDto</code></b>
  * <p>
- * Description.
+ * 拦截规则列表显示dto.
  * <p>
  * <b>Creation Time:</b> 2019/4/11 15:56.
  *

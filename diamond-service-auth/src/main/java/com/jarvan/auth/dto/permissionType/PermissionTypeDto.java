@@ -1,51 +1,42 @@
-package com.jarvan.auth.dto.user;
+package com.jarvan.auth.dto.permissionType;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 /**
- * <b><code>UserRoleDto</code></b>
+ * <b><code>PermissionTypeDto</code></b>
  * <p>
- * Description.
+ * 权限类型列表展示dto.
  * <p>
- * <b>Creation Time:</b> 2019/4/4 16:36.
+ * <b>Creation Time:</b> 2019/4/12 11:59.
  *
  * @author liuruojing
  * @since diamond-be 0.1.0
  */
 @Data
-public class UserRoleDto {
+public class PermissionTypeDto {
+
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private String username;
-
-
-    private String sex;
-
-    private Integer age;
-
-    /**
-     * 账户状态
-     */
-    private Integer status;
-
-    private String mobile;
-
-    private String email;
+    private String perTypeName;
 
     @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime createdTime;
 
-    private String wechat;
+    @JsonIgnore
+    private String createdUserName;
 
-    private String qq;
+    @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
+    private LocalDateTime updatedTime;
 
-    private String roleName;
+    @JsonIgnore
+    private String updatedUserName;
 }

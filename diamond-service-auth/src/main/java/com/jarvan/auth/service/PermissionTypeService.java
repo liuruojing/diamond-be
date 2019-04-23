@@ -1,5 +1,7 @@
 package com.jarvan.auth.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.jarvan.auth.dto.permissionType.PermissionTypeDto;
 import com.jarvan.auth.entity.PermissionType;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface PermissionTypeService extends IService<PermissionType> {
 
+    PermissionType save(String name);
+
+    void delete(String ids);
+
+    IPage<PermissionTypeDto> selectAll(Integer pageNum, Integer pageSize, String searchName);
 }

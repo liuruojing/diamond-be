@@ -17,5 +17,7 @@
     <sql id="Base_Column_List">
         id, per_type_name, created_time, created_user_id, updated_time, updated_user_id, is_primary
     </sql>
+    <select id="selectAll">
 
+    </select>
 </mapper>

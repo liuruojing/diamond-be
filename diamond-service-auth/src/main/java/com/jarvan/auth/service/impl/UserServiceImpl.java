@@ -1,10 +1,9 @@
 package com.jarvan.auth.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jarvan.auth.dto.user.UserRoleDto;
+import com.jarvan.auth.dto.user.UserDto;
 import com.jarvan.auth.entity.User;
 import com.jarvan.auth.mapper.UserMapper;
 import com.jarvan.auth.service.UserRoleRelationService;
@@ -50,12 +49,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (roleId != null) {
             // where查询，仅查出赋予指定角色的用户
             return userMapper.selectAll(
-                    new Page<UserRoleDto>(pageNum, pageSize), searchName,
+                    new Page<UserDto>(pageNum, pageSize), searchName,
                     roleId);
         } else {
             // 左查询，可以查出所有用户，即使未授予角色的用户
             return userMapper.selectAlls(
-                    new Page<UserRoleDto>(pageNum, pageSize), searchName);
+                    new Page<UserDto>(pageNum, pageSize), searchName);
         }
     }
 

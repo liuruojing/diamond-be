@@ -5,21 +5,21 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
  * </p>
  *
  * @author liuruojing
  * @since 2019-04-04
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 @TableName("auth_permission_type")
 public class PermissionType implements Serializable {
 
@@ -30,18 +30,22 @@ public class PermissionType implements Serializable {
 
     private String perTypeName;
 
+    @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime createdTime;
 
+    @JsonIgnore
     private Long createdUserId;
 
+    @JsonFormat(pattern = "yyyy-MM-hh HH:mm:ss")
     private LocalDateTime updatedTime;
 
+    @JsonIgnore
     private Long updatedUserId;
 
     /**
      * 是否为系统自带的默认权限
      */
+    @JsonIgnore
     private Integer isPrimary;
-
 
 }
