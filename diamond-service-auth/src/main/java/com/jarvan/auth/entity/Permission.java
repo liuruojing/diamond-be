@@ -51,9 +51,7 @@ public class Permission implements Serializable {
     @JsonIgnore
     private Long updatedUserId;
 
-    /**
-     * 项目初始化时配置的权限，不可删除
-     */
+
     @JsonIgnore
     private Integer isPrimary;
 

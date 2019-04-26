@@ -61,4 +61,7 @@ public class User implements Serializable {
 
     private String qq;
 
+    @JsonIgnore
+    private Integer isPrimary;
+
 }
